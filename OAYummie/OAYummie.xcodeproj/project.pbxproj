@@ -16,6 +16,8 @@
 		22155FE628CF6FE200AE6E03 /* OADescriptionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22155FE528CF6FE200AE6E03 /* OADescriptionLabel.swift */; };
 		223C26D828D05DD8006CC15F /* OAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223C26D728D05DD8006CC15F /* OAButton.swift */; };
 		223C26DC28D06142006CC15F /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223C26DB28D06142006CC15F /* OnboardingVC.swift */; };
+		2252615028DFDBAD00DFD24C /* OAContainerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2252614F28DFDBAD00DFD24C /* OAContainerLabel.swift */; };
+		2279684928DC9DFE005F059B /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2279684828DC9DFD005F059B /* HomeVC.swift */; };
 		228E0FC528D082E10055CD95 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E0FC428D082E10055CD95 /* OnboardingCell.swift */; };
 		228E0FC828D083730055CD95 /* FlowLayout+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E0FC728D083730055CD95 /* FlowLayout+Ext.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +34,8 @@
 		22155FE528CF6FE200AE6E03 /* OADescriptionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OADescriptionLabel.swift; sourceTree = "<group>"; };
 		223C26D728D05DD8006CC15F /* OAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAButton.swift; sourceTree = "<group>"; };
 		223C26DB28D06142006CC15F /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
+		2252614F28DFDBAD00DFD24C /* OAContainerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAContainerLabel.swift; sourceTree = "<group>"; };
+		2279684828DC9DFD005F059B /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		228E0FC428D082E10055CD95 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		228E0FC728D083730055CD95 /* FlowLayout+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLayout+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +112,7 @@
 			children = (
 				22155FE328CF6FB700AE6E03 /* OATitleLabel.swift */,
 				22155FE528CF6FE200AE6E03 /* OADescriptionLabel.swift */,
+				2252614F28DFDBAD00DFD24C /* OAContainerLabel.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -127,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				223C26DB28D06142006CC15F /* OnboardingVC.swift */,
+				2279684828DC9DFD005F059B /* HomeVC.swift */,
 			);
 			path = "Screens ";
 			sourceTree = "<group>";
@@ -225,11 +231,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2213EF6A28D128FD0024A030 /* OnboardingSlide.swift in Sources */,
+				2279684928DC9DFE005F059B /* HomeVC.swift in Sources */,
 				228E0FC828D083730055CD95 /* FlowLayout+Ext.swift in Sources */,
 				22155FE628CF6FE200AE6E03 /* OADescriptionLabel.swift in Sources */,
 				223C26DC28D06142006CC15F /* OnboardingVC.swift in Sources */,
 				228E0FC528D082E10055CD95 /* OnboardingCell.swift in Sources */,
 				22155FCD28CF6D3000AE6E03 /* AppDelegate.swift in Sources */,
+				2252615028DFDBAD00DFD24C /* OAContainerLabel.swift in Sources */,
 				22155FCF28CF6D3000AE6E03 /* SceneDelegate.swift in Sources */,
 				22155FE428CF6FB700AE6E03 /* OATitleLabel.swift in Sources */,
 				223C26D828D05DD8006CC15F /* OAButton.swift in Sources */,

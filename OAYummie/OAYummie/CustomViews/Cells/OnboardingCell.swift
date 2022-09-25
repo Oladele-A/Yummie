@@ -51,7 +51,9 @@ class OnboardingCell: UICollectionViewCell {
         addSubview(onboardingImage)
         addSubview(stackView)
         
+        titleLabel.numberOfLines = 2
         descriptionLabel.numberOfLines = 2
+        
         onboardingImage.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
