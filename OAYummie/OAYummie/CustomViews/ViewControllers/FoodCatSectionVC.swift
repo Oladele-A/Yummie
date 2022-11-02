@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FoodCatSectionVCDelegate: AnyObject{
-    func didSelectCell(childVC: FoodCatSectionVC, indexpath:IndexPath)
+    func didSelectCell(cell: DishCategory)
 }
 
 class FoodCatSectionVC: SectionVC {
@@ -56,9 +56,9 @@ extension FoodCatSectionVC: UICollectionViewDataSource, UICollectionViewDelegate
         cell.set(category: foodCategory[indexPath.item])
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Cell tapped")
-        delegate.didSelectCell(childVC: FoodCatSectionVC(coder: .init())! , indexpath: indexPath)
+        let dishCategory = foodCategory[indexPath.item]
+        delegate.didSelectCell(cell: dishCategory)
     }
 }

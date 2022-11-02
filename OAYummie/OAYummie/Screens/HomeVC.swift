@@ -17,9 +17,6 @@ class HomeVC: UIViewController {
     let popularDishesContainer = UIView()
     let chefsSpecialsContainer = UIView()
     
-    var b: UICollectionView!
-    var c: IndexPath!
-    
     var categories:[DishCategory] = []
     
     override func viewDidLoad() {
@@ -137,7 +134,8 @@ class HomeVC: UIViewController {
 }
 
 extension HomeVC: FoodCatSectionVCDelegate{
-    func didSelectCell(childVC: FoodCatSectionVC, indexpath: IndexPath) {
+    
+    func didSelectCell(cell: DishCategory) {
         let destVC = ListDishesVC()
         destVC.title = "List"
         present(destVC, animated: true)
