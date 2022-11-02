@@ -13,6 +13,7 @@ class OnboardingVC: UIViewController {
     var collectionView: UICollectionView!
     let pageControl = UIPageControl()
     let doneButton = OAButton(backgroundColor: .black.withAlphaComponent(0.75), title: "Next")
+    
     var slides: [OnboardingSlide] = []
     
     var currentPage = 0 {
@@ -120,7 +121,6 @@ class OnboardingVC: UIViewController {
     }
     
     func configureCollectionView(with frame: CGRect){
-
         collectionView = UICollectionView(frame: frame, collectionViewLayout: UICollectionViewFlowLayout.createSingleFlowLayout(in: containerView))
 
         view.addSubview(collectionView)

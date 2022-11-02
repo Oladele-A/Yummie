@@ -17,9 +17,14 @@ class HomeVC: UIViewController {
     let popularDishesContainer = UIView()
     let chefsSpecialsContainer = UIView()
     
+    var b: UICollectionView!
+    var c: IndexPath!
+    
+    var categories:[DishCategory] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1)
         title = "Yummie"
         ConfigureScrollView()
         layoutUI()
@@ -28,6 +33,50 @@ class HomeVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        let categoryFrame = getCollectionViewFrame(from: foodCategoryContainer)
+        print(categoryFrame)
+        let popularFrame = getCollectionViewFrame(from: popularDishesContainer)
+        print(popularFrame)
+        let specialsFrame = getCollectionViewFrame(from: chefsSpecialsContainer)
+        print(specialsFrame)
+        
+        showLoadingView()
+        NetworkManager.shared.fetchAllCategories { [weak self] result in
+            guard let self = self else { return }
+            
+            self.dismissLoadingView()
+            switch result {
+                
+            case .success(let allCategories):
+                self.categories = allCategories.data.categories
+                self.add(childVC: FoodCatSectionVC(frame: categoryFrame, foodCategory: self.categories, delegate: self), to: self.foodCategoryContainer)
+                let popularDishes = allCategories.data.populars
+                self.add(childVC: PopularDishesSectionVC(frame: popularFrame, popularDishes: popularDishes), to: self.popularDishesContainer)
+                let chefSpecials = allCategories.data.specials
+                self.add(childVC: ChefSpecialsSectionVC(frame: specialsFrame, chefSpecials: chefSpecials), to: self.chefsSpecialsContainer)
+            case .failure(let error):
+                print(error.rawValue)
+            }
+        }
+        
+
+    }
+    
+    func add(childVC: UIViewController, to containerView:UIView){
+        addChild(childVC)
+        containerView.addSubview(childVC.view)
+        childVC.view.frame = containerView.bounds
+        childVC.didMove(toParent: self)
+    }
+    
+    func getCollectionViewFrame(from container: UIView)-> CGRect{
+        let xCordinate = container.bounds.origin.x
+        let yCordinate = container.bounds.origin.y + 16 + 24
+        let width = container.bounds.size.width
+        let height = container.bounds.size.height - 16 - 24
+        let collectionFrame = CGRect(x: xCordinate, y: yCordinate, width: width, height: height)
+        return collectionFrame
     }
     
     func ConfigureScrollView(){
@@ -36,6 +85,7 @@ class HomeVC: UIViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
         
         
         NSLayoutConstraint.activate([
@@ -58,13 +108,6 @@ class HomeVC: UIViewController {
         contentView.addSubview(stackView)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-//        foodCategoryContainer.translatesAutoresizingMaskIntoConstraints = false
-//        popularDishesContainer.translatesAutoresizingMaskIntoConstraints = false
-//        chefsSpecialsContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-        foodCategoryContainer.backgroundColor = .systemMint
-        popularDishesContainer.backgroundColor = .systemBlue
-        chefsSpecialsContainer.backgroundColor = .systemRed
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -89,5 +132,16 @@ class HomeVC: UIViewController {
         stackView.addArrangedSubview(foodCategoryContainer)
         stackView.addArrangedSubview(popularDishesContainer)
         stackView.addArrangedSubview(chefsSpecialsContainer)
+        
     }
 }
+
+extension HomeVC: FoodCatSectionVCDelegate{
+    func didSelectCell(childVC: FoodCatSectionVC, indexpath: IndexPath) {
+        let destVC = ListDishesVC()
+        destVC.title = "List"
+        present(destVC, animated: true)
+    }
+}
+
+
