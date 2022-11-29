@@ -28,7 +28,10 @@ class foodImageView: UIImageView {
     func downloadFoodImage(fromURL url: String){
         NetworkManager.shared.downloadImage(from: url) { [weak self] image in
             guard let self = self else { return }
-            self.image = image
+            
+            DispatchQueue.main.async {
+                self.image = image
+            }
         }
     }
 }

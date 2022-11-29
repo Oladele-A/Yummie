@@ -1,39 +1,41 @@
 //
-//  ListDishesVC.swift
+//  ListOrdersVC.swift
 //  OAYummie
 //
-//  Created by Oladele Abimbola on 10/29/22.
+//  Created by Oladele Abimbola on 11/27/22.
 //
 
 import UIKit
 
-class ListDishesVC: UIViewController {
+class ListOrdersVC: UIViewController {
+    
 
     let tableView = UITableView()
-    
-    var category: DishCategory!
-    var dishes:[Dish] = []
+    var orders:[Order] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Orders"
         configureTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         showLoadingView(withLabel: "")
-        NetworkManager.shared.fetchCategoryDishes(categoryId: category.id) { [weak self] result in
+        NetworkManager.shared.fetchOrders { [weak self] result in
             guard let self = self else { return }
             self.dismissLoadingView()
             switch result{
                 
-            case .success( let dishList):
-                self.dishes = dishList.data
+            case .success(let orders):
+                self.orders = orders.data
                 self.tableView.reloadData()
-            case .failure( let error):
+            case .failure(let error):
                 print(error)
             }
         }
     }
-
-    
     func configureTableView(){
         view.addSubview(tableView)
         
@@ -47,20 +49,20 @@ class ListDishesVC: UIViewController {
     }
 }
 
-extension ListDishesVC: UITableViewDataSource, UITableViewDelegate{
+extension ListOrdersVC: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dishes.count
+        return orders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DishListCell.reuseId, for: indexPath) as! DishListCell
-        cell.setUp(dish: dishes[indexPath.row])
+        cell.set(order: orders[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dish = dishes[indexPath.row]
+        let dish = orders[indexPath.row].dish
         let destVC = DishDetailVC()
         destVC.dish = dish
         

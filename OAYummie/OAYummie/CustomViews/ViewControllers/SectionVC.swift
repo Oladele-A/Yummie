@@ -9,7 +9,7 @@ import UIKit
 
 class SectionVC: UIViewController {
     
-    let sectionLabel = SectionHeaderLabel()
+    let sectionLabel = SectionHeaderLabel(labelColor: .darkGray)
 
     var collectionView: UICollectionView!
     
@@ -29,9 +29,7 @@ class SectionVC: UIViewController {
         layoutUI()
     }
         
-    func configureCollectionView(with frame: CGRect){
-        
-    }
+    func configureCollectionView(with frame: CGRect){}
     
     private func layoutUI(){
         view.addSubview(sectionLabel)

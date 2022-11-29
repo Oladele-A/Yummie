@@ -18,8 +18,13 @@ class SectionHeaderLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+    init(labelColor: UIColor){
+        super.init(frame: .zero)
+        textColor = labelColor
+        configure()
+    }
+    
     private func configure(){
-        textColor = .darkGray
         font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         lineBreakMode = .byTruncatingTail
         baselineAdjustment = .alignBaselines

@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeVC: UIViewController {
-    
+
     let scrollView = UIScrollView()
     let contentView = UIView()
     
@@ -16,48 +16,46 @@ class HomeVC: UIViewController {
     let foodCategoryContainer = UIView()
     let popularDishesContainer = UIView()
     let chefsSpecialsContainer = UIView()
+    var ordersButton: UIBarButtonItem!
     
-    var categories:[DishCategory] = []
+    var foodCategory:[DishCategory] = []
+    var popularDishes:[Dish] = []
+    var chefsSpecials:[Dish] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1)
-        title = "Yummie"
+        configureViewController()
         ConfigureScrollView()
-        layoutUI()
-        configureStackView()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         let categoryFrame = getCollectionViewFrame(from: foodCategoryContainer)
-        print(categoryFrame)
         let popularFrame = getCollectionViewFrame(from: popularDishesContainer)
-        print(popularFrame)
         let specialsFrame = getCollectionViewFrame(from: chefsSpecialsContainer)
-        print(specialsFrame)
         
-        showLoadingView()
+        showLoadingView(withLabel: "")
+        ordersButton.isEnabled = false
         NetworkManager.shared.fetchAllCategories { [weak self] result in
             guard let self = self else { return }
             
             self.dismissLoadingView()
+            self.ordersButton.isEnabled = true
             switch result {
                 
             case .success(let allCategories):
-                self.categories = allCategories.data.categories
-                self.add(childVC: FoodCatSectionVC(frame: categoryFrame, foodCategory: self.categories, delegate: self), to: self.foodCategoryContainer)
-                let popularDishes = allCategories.data.populars
-                self.add(childVC: PopularDishesSectionVC(frame: popularFrame, popularDishes: popularDishes), to: self.popularDishesContainer)
-                let chefSpecials = allCategories.data.specials
-                self.add(childVC: ChefSpecialsSectionVC(frame: specialsFrame, chefSpecials: chefSpecials), to: self.chefsSpecialsContainer)
+                self.foodCategory = allCategories.data.categories
+                self.popularDishes = allCategories.data.populars
+                self.chefsSpecials = allCategories.data.specials
+                
+                self.add(childVC: FoodCatSectionVC(frame: categoryFrame, foodCategory: self.foodCategory, delegate: self), to: self.foodCategoryContainer)
+                self.add(childVC: PopularDishesSectionVC(frame: popularFrame, popularDishes: self.popularDishes, delegate: self), to: self.popularDishesContainer)
+                self.add(childVC: ChefSpecialsSectionVC(frame: specialsFrame, chefSpecials: self.chefsSpecials, delegate: self), to: self.chefsSpecialsContainer)
             case .failure(let error):
-                print(error.rawValue)
+                self.showAlert(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
             }
         }
-        
-
     }
     
     func add(childVC: UIViewController, to containerView:UIView){
@@ -74,6 +72,20 @@ class HomeVC: UIViewController {
         let height = container.bounds.size.height - 16 - 24
         let collectionFrame = CGRect(x: xCordinate, y: yCordinate, width: width, height: height)
         return collectionFrame
+    }
+    
+    
+    @objc func showAllOrders(){
+        let destVC = ListOrdersVC()
+        navigationController?.pushViewController(destVC, animated: true)
+    }
+    
+    func configureViewController(){
+        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1)
+        title = "Yummie"
+        ordersButton = UIBarButtonItem(image: UIImage(systemName: "takeoutbag.and.cup.and.straw"), style: .plain, target: self, action: #selector(showAllOrders))
+        ordersButton.tintColor = .systemRed
+        navigationItem.rightBarButtonItem = ordersButton
     }
     
     func ConfigureScrollView(){
@@ -99,6 +111,8 @@ class HomeVC: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.heightAnchor.constraint(equalToConstant: 686)
         ])
+        
+        layoutUI()
     }
     
     func layoutUI(){
@@ -116,6 +130,8 @@ class HomeVC: UIViewController {
             popularDishesContainer.heightAnchor.constraint(equalToConstant: 340),
             chefsSpecialsContainer.heightAnchor.constraint(equalToConstant: 160)
         ])
+        
+        configureStackView()
     }
     
     func configureStackView(){
@@ -135,11 +151,28 @@ class HomeVC: UIViewController {
 
 extension HomeVC: FoodCatSectionVCDelegate{
     
-    func didSelectCell(cell: DishCategory) {
+    func didSelectCell(dishCategory: DishCategory) {
         let destVC = ListDishesVC()
-        destVC.title = "List"
-        present(destVC, animated: true)
+        destVC.title = dishCategory.name
+        destVC.category = dishCategory
+        navigationController?.pushViewController(destVC, animated: true)
     }
 }
 
+extension HomeVC: PopularDishesSectionVCDelegate{
+    
+    func didSelectCell(dish: Dish) {
+        let destVC = DishDetailVC()
+        destVC.dish = dish
+        navigationController?.pushViewController(destVC, animated: true)
+    }
+}
 
+extension HomeVC: ChefSpecialsSectionVCDelegate{
+    
+    func didSelectSpecialsCell(dish: Dish) {
+        let destVC = DishDetailVC()
+        destVC.dish = dish
+        navigationController?.pushViewController(destVC, animated: true)
+    }
+}

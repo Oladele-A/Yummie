@@ -38,11 +38,37 @@ class NetworkManager{
         }
     }
     
+    
     func fetchAllCategories(completion:@escaping (Result<AllCategories, YummieError>)->Void){
         let urlString = Endpoint.fetchAllCategories
         
         guard let url = urlString.asURL else { return }
         taskForGetRequest(url: url, response: AllCategories.self, completion: completion)
+    }
+    
+    
+    func fetchCategoryDishes(categoryId: String, completion:@escaping (Result<DishList, YummieError>) -> Void){
+        let urlString = Endpoint.fetchCategoryDishes(categoryId)
+        
+        guard let url = urlString.asURL else { return }
+        taskForGetRequest(url: url, response: DishList.self, completion: completion)
+    }
+    
+    
+    func placeOrder(name: String, dishId: String, completion:@escaping (Result<PlaceOrder, YummieError>)->Void){
+        let body = OrderRequest(name: name)
+        let urlString = Endpoint.placeOrder(dishId)
+        
+        guard let url = urlString.asURL else { return }
+        taskForPostRequest(url: url, response: PlaceOrder.self, requestBody: body, completion: completion)
+    }
+    
+    
+    func fetchOrders(completion:@escaping (Result<FetchOrders, YummieError>)->Void){
+        let urlString = Endpoint.fetchOrders
+        
+        guard let url = urlString.asURL else { return }
+        taskForGetRequest(url: url, response: FetchOrders.self, completion: completion)
     }
     
     func downloadImage(from urlString: String, completion:@ escaping (UIImage?)-> Void){
@@ -66,9 +92,7 @@ class NetworkManager{
             
             guard let image = UIImage(data: data) else{ return }
             
-            DispatchQueue.main.async {
-                completion(image)
-            }
+            completion(image)
         }
         task.resume()
     }
@@ -94,7 +118,6 @@ class NetworkManager{
             guard let data = data else {
                 DispatchQueue.main.async {
                     completion(.failure(.errorDecoding))
-                    print("Here!!!!")
                 }
                 return
             }
@@ -108,7 +131,60 @@ class NetworkManager{
             }catch{
                 DispatchQueue.main.async {
                     completion(.failure(.errorDecoding))
-                    print("na this place")
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    private func taskForPostRequest<ResponseType:Decodable, RequestType:Encodable>(url:URL,
+                                                                                   response:ResponseType.Type,
+                                                                                   requestBody: RequestType,
+                                                                                   completion:@escaping (Result<ResponseType, YummieError>)-> Void){
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let encoder = JSONEncoder()
+        do{
+            let postObject = try encoder.encode(requestBody)
+            request.httpBody = postObject
+        }catch{
+            completion(.failure(.unknownError))
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            if let _ = error{
+                DispatchQueue.main.async {
+                    completion(.failure(.unableToComplete))
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    completion(.failure(.serverError))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(.errorDecoding))
+                }
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            do{
+                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(responseObject))
+                }
+            }catch{
+                DispatchQueue.main.async {
+                    completion(.failure(.errorDecoding))
                 }
             }
         }

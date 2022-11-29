@@ -7,12 +7,19 @@
 
 import UIKit
 
+protocol ChefSpecialsSectionVCDelegate: AnyObject{
+    func didSelectSpecialsCell(dish:Dish)
+}
+
 class ChefSpecialsSectionVC: SectionVC {
-    var chefSpecials:[Dish] = []
     
-    init(frame: CGRect, chefSpecials:[Dish]){
+    var chefSpecials:[Dish] = []
+    var delegate: ChefSpecialsSectionVCDelegate!
+    
+    init(frame: CGRect, chefSpecials:[Dish], delegate: ChefSpecialsSectionVCDelegate){
         super.init(frame: frame)
         self.chefSpecials = chefSpecials
+        self.delegate = delegate
     }
     
     required init?(coder: NSCoder) {
@@ -33,11 +40,12 @@ class ChefSpecialsSectionVC: SectionVC {
         collectionView.showsHorizontalScrollIndicator = false
         
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(ChefSpecialsCell.self, forCellWithReuseIdentifier: ChefSpecialsCell.reuseId)
     }
 }
 
-extension ChefSpecialsSectionVC: UICollectionViewDataSource{
+extension ChefSpecialsSectionVC: UICollectionViewDataSource, UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return chefSpecials.count
@@ -47,5 +55,10 @@ extension ChefSpecialsSectionVC: UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChefSpecialsCell.reuseId, for: indexPath) as! ChefSpecialsCell
         cell.setUp(dish: chefSpecials[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let chefsSpecials = chefSpecials[indexPath.item]
+        delegate.didSelectSpecialsCell(dish: chefsSpecials)
     }
 }

@@ -7,13 +7,19 @@
 
 import UIKit
 
+protocol PopularDishesSectionVCDelegate: AnyObject{
+    func didSelectCell(dish: Dish)
+}
+
 class PopularDishesSectionVC: SectionVC {
 
     var popularDishes:[Dish] = []
+    var delegate: PopularDishesSectionVCDelegate!
     
-    init(frame:CGRect, popularDishes:[Dish]){
+    init(frame:CGRect, popularDishes:[Dish], delegate:PopularDishesSectionVCDelegate){
         super.init(frame: frame)
         self.popularDishes = popularDishes
+        self.delegate = delegate
     }
     
     required init?(coder: NSCoder) {
@@ -34,12 +40,14 @@ class PopularDishesSectionVC: SectionVC {
         collectionView.showsVerticalScrollIndicator = false
         
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(PopularDishesCell.self, forCellWithReuseIdentifier: PopularDishesCell.reuseId)
     }
     
 }
 
-extension PopularDishesSectionVC: UICollectionViewDataSource{
+extension PopularDishesSectionVC: UICollectionViewDataSource, UICollectionViewDelegate{
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return popularDishes.count
     }
@@ -50,5 +58,8 @@ extension PopularDishesSectionVC: UICollectionViewDataSource{
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let popularDish = popularDishes[indexPath.item]
+        delegate.didSelectCell(dish: popularDish)
+    }
 }

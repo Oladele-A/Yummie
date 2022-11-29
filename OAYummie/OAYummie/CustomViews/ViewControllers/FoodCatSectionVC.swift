@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FoodCatSectionVCDelegate: AnyObject{
-    func didSelectCell(cell: DishCategory)
+    func didSelectCell(dishCategory: DishCategory)
 }
 
 class FoodCatSectionVC: SectionVC {
@@ -37,10 +37,11 @@ class FoodCatSectionVC: SectionVC {
         collectionView = UICollectionView(frame: frame, collectionViewLayout: UICollectionViewFlowLayout.createTwoRowFlowLayout(with: frame))
         view.addSubview(collectionView)
         
-        collectionView.isUserInteractionEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
+        
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(FoodCategoryCell.self, forCellWithReuseIdentifier: FoodCategoryCell.reuseId)
     }
 }
@@ -59,6 +60,6 @@ extension FoodCatSectionVC: UICollectionViewDataSource, UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let dishCategory = foodCategory[indexPath.item]
-        delegate.didSelectCell(cell: dishCategory)
+        delegate.didSelectCell(dishCategory: dishCategory)
     }
 }

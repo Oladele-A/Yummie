@@ -69,6 +69,7 @@ class OnboardingVC: UIViewController {
             let navigationController = UINavigationController(rootViewController: destinationVC)
             navigationController.modalPresentationStyle = .fullScreen
             navigationController.modalTransitionStyle = .flipHorizontal
+            UserDefaults.standard.set(true, forKey: "hasOnboarded")
             present(navigationController, animated: true)
         }else{
             currentPage += 1

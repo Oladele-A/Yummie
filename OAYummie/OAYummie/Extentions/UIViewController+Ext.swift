@@ -11,7 +11,7 @@ fileprivate var containerView: UIView!
 
 extension UIViewController{
     
-    func showLoadingView(){
+    func showLoadingView(withLabel text: String){
         containerView = UIView(frame: view.bounds)
         view.addSubview(containerView)
         containerView.backgroundColor = .systemBackground
@@ -19,14 +19,21 @@ extension UIViewController{
         
         UIView.animate(withDuration: 0.2) {containerView.alpha = 0.8}
         let activityIndicator = UIActivityIndicatorView(style: .large)
+        let activityLabel = OADescriptionLabel(textAlignment: .center, textColor: .label, fontSize: 17)
+        
         containerView.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(activityLabel)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints  = false
         
         NSLayoutConstraint.activate([
             activityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            activityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+            activityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            
+            activityLabel.centerXAnchor.constraint(equalTo: activityIndicator.centerXAnchor),
+            activityLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10)
         ])
-        
+
+        activityLabel.text = text
         activityIndicator.startAnimating()
     }
     
@@ -35,5 +42,12 @@ extension UIViewController{
             containerView.removeFromSuperview()
             containerView = nil
         }
+    }
+    
+    func showAlert(title: String, message: String, buttonTitle: String){
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: buttonTitle, style: .default)
+        alertVC.addAction(alertAction)
+        present(alertVC, animated: true)
     }
 }

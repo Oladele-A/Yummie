@@ -29,7 +29,7 @@ class OADescriptionLabel: UILabel {
     private func configure(){
         baselineAdjustment = .alignBaselines
         translatesAutoresizingMaskIntoConstraints = false
-        baselineAdjustment = .alignBaselines
+        lineBreakMode = .byTruncatingTail
         numberOfLines = 1
         contentMode = .left
     }
