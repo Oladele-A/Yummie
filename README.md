@@ -12,9 +12,7 @@
 - iOS 15
 
 ## App Screenshots
-![mockup](3.png)
-![mockup](6.png)
-![mockup](4.png)
-![mockup](5.png)
+![mockup](3.png) ![mockup](6.png)
+![mockup](4.png) ![mockup](5.png)
 
 
