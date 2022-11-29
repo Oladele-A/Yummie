@@ -11,8 +11,6 @@
 - Basic proficieny with Xcode and Swift
 - iOS 15
 
-## App Screenshots
-![mockup](3.png) ![mockup](6.png)
-![mockup](4.png) ![mockup](5.png)
+![6](https://user-images.githubusercontent.com/96730966/204521382-b738b2e3-e0de-4530-8f82-180a23ae918b.png)
 
 
