@@ -1,6 +1,6 @@
 # YUMMIE, Food ordering app - **100% Programmatic UI** - No 3rd Party Library.
 
-![remoteImage](https://drive.google.com/file/d/14sKXubblBnNzKjSr0L-27EW_faYx1_3Z/view?usp=sharing)
+![remoteImage](https://drive.google.com/file/d/14sKXubblBnNzKjSr0L-27EW_faYx1_3Z/view?usp=share_link)
 
 ## Project Overview
 - This project was built using UIKit components in Xcode.
